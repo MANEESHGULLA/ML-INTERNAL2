@@ -1,50 +1,71 @@
-from sklearn.datasets import load_iris
-from sklearn.preprocessing import StandardScaler
-from sklearn.model_selection import train_test_split
-from sklearn.neighbors import KNeighborsClassifier
 import numpy as np
-from sklearn.metrics import accuracy_score,confusion_matrix, ConfusionMatrixDisplay
 import matplotlib.pyplot as plt
+from sklearn.datasets import load_iris
+from sklearn.model_selection import train_test_split
+from sklearn.preprocessing import StandardScaler
+from sklearn.neighbors import KNeighborsClassifier
+from sklearn.metrics import accuracy_score, classification_report
+from sklearn.metrics import confusion_matrix, ConfusionMatrixDisplay
 
-iris=load_iris()
-x=iris.data
-y=iris.target
+iris = load_iris()
+X = iris.data   
+y = iris.target 
 
-x_train,x_test,y_train,y_test=train_test_split(x,y,test_size=0.3,random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
 
 scaler = StandardScaler()
-x_train_sclaed=scaler.fit_transform(x_train)
-x_test_scaled=scaler.transform(x_test)
+X_train = scaler.fit_transform(X_train)
+X_test = scaler.transform(X_test)
 
-knn=KNeighborsClassifier(n_neighbors=3,metric='manhattan')
-knn.fit(x_train,y_train)
 
-unique,counts = np.unique(y_test,return_counts=True)
 
-print(f"Count number of flowers in each category of test set")
-for cls,count in zip(unique,counts):
-  print(f"{iris.target_names[cls]}:{count}")
+knn = KNeighborsClassifier(n_neighbors=3,metric='manhattan')
+
+# Train model
+knn.fit(X_train, y_train)
+
+# Count number of flowers in each category of test set
+unique, counts = np.unique(y_test, return_counts=True)
+
+print("\nNumber of flowers in each category in Test Data:")
+for cls, count in zip(unique, counts):
+    print(f"{iris.target_names[cls]}: {count}")
 print()
 
-y_pred=knn.predict(x_test)
+# Predict test set results
+y_pred = knn.predict(X_test)
 
-print("\naccuracy score:",accuracy_score(y_test,y_pred))
-print("\nconfusion matrix:\n",confusion_matrix(y_test,y_pred))
+# Evaluate
+print("Accuracy:", accuracy_score(y_test, y_pred))
 print()
-cm=confusion_matrix(y_test,y_pred)
+print("Test samples:",X_test.shape)
+print()
 
-disp=ConfusionMatrixDisplay(confusion_matrix=cm,display_labels=iris.target_names)
+cm = confusion_matrix(y_test, y_pred)
+print("Confusion Matrix:\n",cm)
+print()
 
+disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=iris.target_names)
 
+# Plot confusion matrix
 disp.plot(cmap="Blues")
 plt.title("Confusion Matrix - KNN")
 plt.show()
+print()
 
+
+# Example: New flower sample [sepal length, sepal width, petal length, petal width]
 new_sample = np.array([[5.5, 3.2, 1.5, 0.2]])
 
-scaled_sample=scaler.transform(new_sample)
+# Scale it using the same scaler (important!)
+new_sample_scaled = scaler.transform(new_sample)
 
-predicted_class=knn.predict(scaled_sample)[0]
+# Predict class
+predicted_class = knn.predict(new_sample_scaled)[0]
 print()
-print("New Sample:", scaled_sample)
-print(f"{iris.target_names[predicted_class]}:{predicted_class}")
+
+# Display result
+print("New Sample:", new_sample)
+print("Predicted Category:", iris.target_names[predicted_class],"(",predicted_class,")")
