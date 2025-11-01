@@ -48,3 +48,16 @@ plt.xlabel('Predicted')
 plt.ylabel('Actual')
 plt.title('Confusion Matrix')
 plt.show()
+
+# Step 10: Test a new sample
+# Example new sample: Sepal Length=5.1, Sepal Width=3.5, Petal Length=1.4, Petal Width=0.2
+new_sample = np.array([[5.1, 3.5, 1.4, 0.2]])
+
+# Scale the new sample using the same scaler
+new_sample_scaled = scaler.transform(new_sample)
+#print(new_sample_scaled)
+
+# Predict the class
+predicted_class = gnb.predict(new_sample_scaled)
+print("Predicted class index:", predicted_class)
+print("Predicted class name:", iris.target_names[predicted_class[0]])
