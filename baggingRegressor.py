@@ -1,5 +1,5 @@
 # bagging regressor
-# --- Step 1: Import libraries ---
+# --- Step 1: Import libraries --
 from sklearn.ensemble import BaggingRegressor
 from sklearn.tree import DecisionTreeRegressor
 from sklearn.datasets import make_regression
