@@ -1,5 +1,5 @@
 # bagging classifier
-# --- Step 1: Import necessary libraries ---
+# --- Step 1: Import necessary libraries --
 from sklearn.ensemble import BaggingClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.datasets import load_iris
