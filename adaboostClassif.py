@@ -1,5 +1,5 @@
 # adaboost classifier
-# --- Step 1: Import Libraries ---
+# --- Step 1: Import Libraries --
 from sklearn.ensemble import AdaBoostClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.datasets import make_classification
