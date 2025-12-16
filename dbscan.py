@@ -37,7 +37,9 @@ labels = np.zeros_like(y_pred_valid)
 # For all samples in cluster i, finds the most common true species label and assigns it. keepdims=True maintains array dimensions, and .mode[0] extracts the mode value. This maps cluster IDs to actual flower species.
 for i in np.unique(y_pred_valid):
     mask2 = (y_pred_valid == i)
-    labels[mask2] = mode(y_true_valid[mask2], keepdims=True).mode[0]
+   # labels[mask2] = mode(y_true_valid[mask2], keepdims=True).mode[0]
+    labels[mask2] = mode(y_true_valid[mask2])[0]
+
 
 acc = accuracy_score(y_true_valid, labels)
 print(f"\nDBSCAN Clustering Accuracy (excluding noise): {acc:.4f}")
