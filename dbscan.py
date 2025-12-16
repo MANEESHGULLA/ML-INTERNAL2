@@ -1,5 +1,13 @@
 # This program applies the DBSCAN (Density-Based Spatial Clustering of Applications with Noise) algorithm to the Iris dataset.
 # It clusters data based on density, identifies noise points, and then compares the obtained clusters with the actual labels to measure accuracy and visualize the confusion matrix.
+
+# 1. What is DBSCAN?
+# Unsupervised learning algorithm
+# Used for clustering
+# Groups points based on density
+# Can detect arbitrary-shaped clusters
+# Automatically identifies noise / outliers
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
