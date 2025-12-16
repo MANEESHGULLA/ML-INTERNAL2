@@ -1,49 +1,38 @@
+# This program applies Agglomerative Hierarchical Clustering (a bottom-up hierarchical clustering method) on the Iris dataset to form 3 clusters corresponding to the three flower species — Setosa, Versicolor, and Virginica.
+# Then, it compares the predicted clusters with actual labels to measure accuracy and visualize the confusion matrix and cluster plot.
+import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
-from sklearn.model_selection import train_test_split
-from sklearn.tree import DecisionTreeClassifier, plot_tree
-from sklearn.metrics import confusion_matrix,accuracy_score
-# Load dataset
-X, y = load_iris(return_X_y=True)
-feature_names = load_iris().feature_names
-class_names = load_iris().target_names
+from sklearn.cluster import AgglomerativeClustering
+from sklearn.metrics import confusion_matrix, accuracy_score, ConfusionMatrixDisplay
+from scipy.stats import mode
 
-# Train-test split
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+iris = load_iris()
+X = iris.data
+y_true = iris.target
 
-# CART Decision Tree (Gini Index)
-clf = DecisionTreeClassifier(
-    criterion="gini",   # CART uses Gini
-    max_depth=5,
-    random_state=42
-)
-clf.fit(X_train, y_train)
+# Creates an Agglomerative Clustering model with 3 clusters. linkage='ward' specifies Ward's method, which minimizes the within-cluster variance when merging clusters (tends to create compact, spherical clusters).
+agg = AgglomerativeClustering(n_clusters=3, linkage='ward')
+y_pred = agg.fit_predict(X)
 
-plt.figure(figsize=(12,8))
-plot_tree(
-    clf,
-    feature_names=feature_names,
-    class_names=class_names,
-    filled=True,
-    rounded=True,
-    fontsize=10
-)
+
+labels = np.zeros_like(y_pred)
+for i in range(3):
+    mask = (y_pred == i)
+    labels[mask] = mode(y_true[mask], keepdims=True).mode[0]
+
+
+acc = accuracy_score(y_true, labels)
+print(f"\nAgglomerative Clustering Accuracy: {acc:.4f}")
+cm = confusion_matrix(y_true, labels)
+print("\nConfusion Matrix:", cm)
+
+ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=iris.target_names).plot(cmap='Blues')
+plt.title("Confusion Matrix - Agglomerative Clustering")
 plt.show()
 
-# Predictions on custom samples
-print("Class of the Flower:", clf.predict([[3, 15, 4, 1.5]]))
-print("Class of the Flower:", clf.predict([[5.1, 3.5, 1.4, 0.2]]))
-print("Class of the Flower:", clf.predict([[5.9, 3.5, 5.1, 1.8]]))
-
-# Prediction with class name
-pred = clf.predict([[3, 15, 4, 1.5]])[0]
-print("Class of the Flower:", pred, "-", class_names[pred])
-
-# Confusion Matrix
-y_pred = clf.predict(X_test)
-cm = confusion_matrix(y_test, y_pred)
-print("Confusion Matrix:\n", cm)
-
-# Accuracy
-acc = accuracy_score(y_test, y_pred)
-print("Accuracy of CART Decision Tree:", acc)
+plt.scatter(X[:, 0], X[:, 1], c=labels, cmap='viridis', s=50)
+plt.title("Agglomerative Clustering Results")
+plt.xlabel("Sepal Length (cm)")
+plt.ylabel("Sepal Width (cm)")
+plt.show()
