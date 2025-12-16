@@ -1,5 +1,21 @@
 # This program applies Agglomerative Hierarchical Clustering (a bottom-up hierarchical clustering method) on the Iris dataset to form 3 clusters corresponding to the three flower species — Setosa, Versicolor, and Virginica.
 # Then, it compares the predicted clusters with actual labels to measure accuracy and visualize the confusion matrix and cluster plot.
+
+# Agglomerative Hierarchical Clustering
+#
+# 1. What is Hierarchical Clustering?
+# Unsupervised learning algorithm
+# Builds a hierarchy of clusters
+# Does not require labels
+# Produces a tree-like structure (dendrogram)
+#
+# How Agglomerative Clustering Works
+# Treat each point as a cluster
+# Compute distance matrix
+# Merge closest clusters using linkage rule
+# Update distance matrix
+# Repeat until n_clusters reac
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris
