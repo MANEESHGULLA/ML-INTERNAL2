@@ -35,7 +35,9 @@ y_pred = agg.fit_predict(X)
 labels = np.zeros_like(y_pred)
 for i in range(3):
     mask = (y_pred == i)
-    labels[mask] = mode(y_true[mask], keepdims=True).mode[0]
+    #labels[mask] = mode(y_true[mask], keepdims=True).mode[0]
+    labels[mask] = mode(y_true[mask])[0]
+
 
 
 acc = accuracy_score(y_true, labels)
